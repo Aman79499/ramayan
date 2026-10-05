@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7A1E1E">
+<title>Shri Ramcharitmanas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Mukta:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFDF7; --surface:#FFFFFF; --ink:#3B0F12; --muted:#7A5A4A;
+  --sindoor:#C0281C; --haldi:#E9A21B; --line:#EADCC6; --play:#FFF1D6; --bar:#7A1E1E; --barInk:#FFF4DE;
+  --vs:1.35rem;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#15122B; --surface:#1E1A3A; --ink:#F6E7C8; --muted:#B8A98C;
+    --sindoor:#FF6A4D; --haldi:#F2B640; --line:#2F2A55; --play:#2C2650; --bar:#0E0C20; --barInk:#F6E7C8;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15122B; --surface:#1E1A3A; --ink:#F6E7C8; --muted:#B8A98C;
+  --sindoor:#FF6A4D; --haldi:#F2B640; --line:#2F2A55; --play:#2C2650; --bar:#0E0C20; --barInk:#F6E7C8;
+  color-scheme:dark;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 150px);scroll-padding-bottom:110px}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Mukta",system-ui,"Noto Sans Devanagari",sans-serif;font-size:16px;line-height:1.6}
+button,select,input{font:inherit;color:inherit}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--haldi);outline-offset:2px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:14px 16px 10px}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-family:"Tiro Devanagari Hindi",serif;font-weight:400;font-size:1.9rem;line-height:1.15;margin:0;color:var(--sindoor)}
+.sub{margin:2px 0 10px;color:var(--muted);font-size:.95rem}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tools input[type=search]{flex:1 1 160px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--sindoor);color:var(--sindoor)}
+
+main{padding:8px 16px 140px}
+.resume{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:12px 0;padding:10px 14px;background:var(--play);border-radius:12px}
+.resume button{border:0;background:var(--sindoor);color:#fff;border-radius:10px;padding:7px 14px;cursor:pointer}
+.note{margin:12px 0;padding:10px 14px;border:1px dashed var(--haldi);border-radius:12px;font-size:.92rem}
+
+.verse{position:relative;margin:14px 0;padding:14px 16px 14px 22px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.verse::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:5px;border-radius:0 4px 4px 0;background:var(--sindoor)}
+.verse.doha::before{background:var(--haldi);width:8px}
+.verse.playing{background:var(--play);border-color:var(--haldi)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kind{color:var(--muted);font-size:.9rem;font-weight:600}
+.acts{display:flex;gap:6px}
+.acts button{border:1px solid var(--line);background:transparent;border-radius:9px;padding:4px 10px;cursor:pointer}
+.acts .mark.on{color:var(--haldi);border-color:var(--haldi)}
+.text{font-family:"Tiro Devanagari Hindi",serif;font-size:var(--vs);line-height:1.9;white-space:pre-line;margin:8px 0 4px}
+.doha .text{text-align:center}
+.arth{margin:6px 0 0;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:calc(var(--vs) * .72)}
+body.hide-arth .arth{display:none}
+.empty{text-align:center;color:var(--muted);margin-top:40px}
+.disclaimer{color:var(--muted);font-size:.85rem;margin-top:28px}
+
+.player{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bar);color:var(--barInk);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.player .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#playBtn{flex:1 1 140px;border:0;border-radius:12px;padding:11px 14px;background:var(--haldi);color:#2A0D06;font-weight:700;cursor:pointer}
+.player select{background:transparent;color:var(--barInk);border:1px solid rgba(255,244,222,.35);border-radius:10px;padding:9px 8px}
+.player select option{color:#000}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>श्री रामचरितमानस</h1>
+    <p class="sub">सुन्दरकाण्ड (sample: opening shlokas to Doha 1)</p>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search a word, e.g. हनुमान" aria-label="Search">
+      <button class="chip" id="fontDown" aria-label="Smaller text">A−</button>
+      <button class="chip" id="fontUp" aria-label="Larger text">A+</button>
+      <button class="chip" id="arthBtn" aria-pressed="true">Meaning</button>
+      <button class="chip" id="themeBtn" aria-label="Day or night mode">Day / Night</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="resume" id="resume" hidden>
+    <span>Continue from where you left off</span>
+    <button id="resumeBtn">Continue</button>
+  </div>
+  <div class="note" id="voiceNote" hidden>
+    No Hindi voice was found on this phone, so listening may sound wrong. On Android, open Settings, search "Text-to-speech", choose Google as the engine and download the Hindi voice. Then reopen this app.
+  </div>
+  <div id="list"></div>
+  <p class="disclaimer">Hindi meanings in this sample are a simple draft. Please get them checked by a learned person before the full release.</p>
+</main>
+
+<div class="player">
+  <div class="wrap">
+    <button id="playBtn">▶ Play path</button>
+    <select id="mode" aria-label="What to read aloud">
+      <option value="both">Verse + meaning</option>
+      <option value="text">Verse only</option>
+      <option value="arth">Meaning only</option>
+    </select>
+    <select id="rate" aria-label="Reading speed">
+      <option value="0.7">Slow</option>
+      <option value="0.85">Normal</option>
+      <option value="1">Fast</option>
+    </select>
+  </div>
+</div>
+
+<script>
+/* ===== DATA (add more verses / kands here) ===== */
+const VERSES = [
+  {id:"SK-S1", type:"shlok", label:"श्लोक 1",
+   text:"शान्तं शाश्वतमप्रमेयमनघं निर्वाणशान्तिप्रदं\nब्रह्माशम्भुफणीन्द्रसेव्यमनिशं वेदान्तवेद्यं विभुम्।\nरामाख्यं जगदीश्वरं सुरगुरुं मायामनुष्यं हरिं\nवन्देऽहं करुणाकरं रघुवरं भूपालचूडामणिम्॥१॥",
+   arth:"शांत, सनातन, प्रमाणों से परे, निष्पाप, मोक्ष रूपी परम शांति देने वाले, ब्रह्मा, शिव और शेषनाग जी द्वारा निरंतर सेवित, वेदांत से जानने योग्य, सर्वव्यापक, देवताओं के भी गुरु, माया से मनुष्य रूप धारण करने वाले, पापों को हरने वाले, करुणा की खान, रघुकुल में श्रेष्ठ और राजाओं के शिरोमणि, राम नाम वाले जगदीश्वर की मैं वंदना करता हूँ।"},
+  {id:"SK-S2", type:"shlok", label:"श्लोक 2",
+   text:"नान्या स्पृहा रघुपते हृदयेऽस्मदीये\nसत्यं वदामि च भवानखिलान्तरात्मा।\nभक्तिं प्रयच्छ रघुपुङ्गव निर्भरां मे\nकामादिदोषरहितं कुरु मानसं च॥२॥",
+   arth:"हे रघुनाथ जी! मैं सच कहता हूँ, और आप तो सबके अंतर्यामी हैं, मेरे हृदय में कोई दूसरी इच्छा नहीं है। हे रघुकुल श्रेष्ठ! मुझे अपनी पूर्ण भक्ति दीजिए और मेरे मन को काम आदि दोषों से मुक्त कर दीजिए।"},
+  {id:"SK-S3", type:"shlok", label:"श्लोक 3",
+   text:"अतुलितबलधामं हेमशैलाभदेहं\nदनुजवनकृशानुं ज्ञानिनामग्रगण्यम्।\nसकलगुणनिधानं वानराणामधीशं\nरघुपतिप्रियभक्तं वातजातं नमामि॥३॥",
+   arth:"अतुलनीय बल के धाम, सोने के पर्वत के समान चमकते शरीर वाले, राक्षस रूपी वन को जलाने के लिए अग्नि के समान, ज्ञानियों में सबसे आगे, सभी गुणों के भंडार, वानरों के स्वामी, श्री रघुनाथ जी के प्रिय भक्त पवनपुत्र श्री हनुमान जी को मैं प्रणाम करता हूँ।"},
+  {id:"SK-C1", type:"chaupai", label:"चौपाई 1",
+   text:"जामवंत के बचन सुहाए। सुनि हनुमंत हृदय अति भाए॥\nतब लगि मोहि परिखेहु तुम्ह भाई। सहि दुख कंद मूल फल खाई॥",
+   arth:"जाम्बवान के सुंदर वचन सुनकर हनुमान जी के हृदय को बहुत अच्छे लगे। उन्होंने कहा, हे भाइयो! तुम लोग दुख सहकर, कंद-मूल और फल खाकर तब तक मेरी प्रतीक्षा करना।"},
+  {id:"SK-C2", type:"chaupai", label:"चौपाई 2",
+   text:"जब लगि आवौं सीतहि देखी। होइहि काजु मोहि हरष बिसेषी॥\nयह कहि नाइ सबन्हि कहुँ माथा। चलेउ हरषि हियँ धरि रघुनाथा॥",
+   arth:"जब तक मैं सीता जी को देखकर लौट न आऊँ। काम अवश्य होगा, क्योंकि मेरे मन में बहुत हर्ष हो रहा है। यह कहकर और सबको सिर नवाकर, हृदय में श्री रघुनाथ जी को धारण करके हनुमान जी प्रसन्न होकर चल पड़े।"},
+  {id:"SK-C3", type:"chaupai", label:"चौपाई 3",
+   text:"सिंधु तीर एक भूधर सुंदर। कौतुक कूदि चढ़ेउ ता ऊपर॥\nबार बार रघुबीर सँभारी। तरकेउ पवनतनय बल भारी॥",
+   arth:"समुद्र के किनारे एक सुंदर पर्वत था। हनुमान जी खेल-खेल में कूदकर उस पर चढ़ गए और बार-बार श्री रघुवीर का स्मरण करके महाबली पवनपुत्र बड़े वेग से उछले।"},
+  {id:"SK-C4", type:"chaupai", label:"चौपाई 4",
+   text:"जेहिं गिरि चरन देइ हनुमंता। चलेउ सो गा पाताल तुरंता॥\nजिमि अमोघ रघुपति कर बाना। एही भाँति चलेउ हनुमाना॥",
+   arth:"जिस पर्वत पर पैर रखकर हनुमान जी उछले, वह तुरंत पाताल में धँस गया। जैसे श्री रघुनाथ जी का अचूक बाण चलता है, उसी तरह हनुमान जी चले।"},
+  {id:"SK-C5", type:"chaupai", label:"चौपाई 5",
+   text:"जलनिधि रघुपति दूत बिचारी। तैं मैनाक होहि श्रमहारी॥",
+   arth:"समुद्र ने उन्हें श्री रघुनाथ जी का दूत जानकर मैनाक पर्वत से कहा, हे मैनाक! तुम इनकी थकान दूर करने वाले बनो, यानी इन्हें विश्राम दो।"},
+  {id:"SK-D1", type:"doha", label:"दोहा 1",
+   text:"हनूमान तेहि परसा कर पुनि कीन्ह प्रनाम।\nराम काजु कीन्हें बिनु मोहि कहाँ बिश्राम॥१॥",
+   arth:"हनुमान जी ने उसे हाथ से छू दिया, फिर प्रणाम करके कहा, भाई! श्री राम जी का काम किए बिना मुझे विश्राम कहाँ?"}
+];
+
+/* ===== STORAGE HELPERS ===== */
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let settings = Object.assign({font:1.35, showArth:true, mode:"both", rate:"0.85", theme:null}, store.get("rcm-settings", {}));
+let bookmarks = new Set(store.get("rcm-bookmarks", []));
+const saveSettings = () => store.set("rcm-settings", settings);
+
+/* ===== RENDER ===== */
+function render(filter){
+  const list = $("#list"); list.innerHTML = "";
+  const q = (filter || "").trim();
+  let shown = 0;
+  VERSES.forEach((v, i) => {
+    if (q && !(v.text.includes(q) || v.arth.includes(q))) return;
+    shown++;
+    const on = bookmarks.has(v.id);
+    const el = document.createElement("article");
+    el.className = "verse " + v.type + (i === playing ? " playing" : "");
+    el.id = "v" + i;
+    el.innerHTML =
+      '<div class="meta"><span class="kind">' + v.label + '</span><div class="acts">' +
+      (hasSpeech ? '<button class="listen" data-i="' + i + '">▶ Listen</button>' : '') +
+      '<button class="mark' + (on ? ' on' : '') + '" data-id="' + v.id + '" aria-label="Bookmark">' + (on ? '★' : '☆') + '</button>' +
+      '</div></div><p class="text">' + v.text + '</p><p class="arth">' + v.arth + '</p>';
+    list.appendChild(el);
+  });
+  if (!shown) list.innerHTML = '<p class="empty">No verse has this word. Try a shorter word, for example हनुमान.</p>';
+}
+
+function applySettings(){
+  document.documentElement.style.setProperty("--vs", settings.font + "rem");
+  document.body.classList.toggle("hide-arth", !settings.showArth);
+  $("#arthBtn").setAttribute("aria-pressed", settings.showArth);
+  if (settings.theme) document.documentElement.setAttribute("data-theme", settings.theme);
+  $("#mode").value = settings.mode;
+  $("#rate").value = settings.rate;
+}
+
+/* ===== LISTEN (Hindi text-to-speech) ===== */
+const hasSpeech = "speechSynthesis" in window;
+let hindiVoice = null, playing = -1, continuous = false, session = 0;
+
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  hindiVoice = vs.find(v => /^hi/i.test(v.lang)) || null;
+  $("#voiceNote").hidden = !!hindiVoice || vs.length === 0;
+}
+function chunks(str){
+  return str.replace(/॥\s*[०-९0-9]+\s*॥/g, "।").replace(/॥/g, "।")
+            .split(/[।\n]+/).map(s => s.trim()).filter(Boolean);
+}
+function partsFor(v){
+  const p = [];
+  if (settings.mode !== "arth") p.push(...chunks(v.text));
+  if (settings.mode !== "text") p.push(...chunks(v.arth));
+  return p;
+}
+function playIndex(i){
+  if (i >= VERSES.length){ stopAll(); return; }
+  const token = ++session;
+  playing = i; markPlaying();
+  store.set("rcm-last", i);
+  const parts = partsFor(VERSES[i]); let k = 0;
+  const next = () => {
+    if (token !== session) return;
+    if (k >= parts.length){ continuous ? playIndex(i + 1) : stopAll(); return; }
+    const u = new SpeechSynthesisUtterance(parts[k++]);
+    u.lang = "hi-IN"; if (hindiVoice) u.voice = hindiVoice;
+    u.rate = parseFloat(settings.rate);
+    u.onend = next;
+    u.onerror = e => { if (e.error !== "interrupted" && e.error !== "canceled") next(); };
+    speechSynthesis.speak(u);
+  };
+  next();
+}
+function playFrom(i, cont){ session++; speechSynthesis.cancel(); continuous = cont; playIndex(i); }
+function stopAll(){ session++; playing = -1; continuous = false; if (hasSpeech) speechSynthesis.cancel(); markPlaying(); }
+function markPlaying(){
+  document.querySelectorAll(".verse").forEach(el => el.classList.toggle("playing", el.id === "v" + playing));
+  document.querySelectorAll(".listen").forEach(b => b.textContent = (+b.dataset.i === playing) ? "■ Stop" : "▶ Listen");
+  $("#playBtn").textContent = playing >= 0 ? "■ Stop" : "▶ Play path";
+  const el = document.getElementById("v" + playing);
+  if (el) el.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center"});
+}
+
+/* ===== EVENTS ===== */
+$("#list").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.classList.contains("listen")){
+    const i = +b.dataset.i;
+    i === playing ? stopAll() : playFrom(i, false);
+  } else if (b.classList.contains("mark")){
+    const id = b.dataset.id;
+    bookmarks.has(id) ? bookmarks.delete(id) : bookmarks.add(id);
+    store.set("rcm-bookmarks", [...bookmarks]);
+    render($("#search").value);
+  }
+});
+$("#playBtn").onclick = () => {
+  if (!hasSpeech){ alert("This browser cannot read aloud. Please open the app in Google Chrome."); return; }
+  playing >= 0 ? stopAll() : playFrom(Math.max(0, store.get("rcm-last", 0)), true);
+};
+$("#search").addEventListener("input", e => render(e.target.value));
+$("#fontUp").onclick = () => { settings.font = Math.min(2.4, +(settings.font + 0.15).toFixed(2)); applySettings(); saveSettings(); };
+$("#fontDown").onclick = () => { settings.font = Math.max(1, +(settings.font - 0.15).toFixed(2)); applySettings(); saveSettings(); };
+$("#arthBtn").onclick = () => { settings.showArth = !settings.showArth; applySettings(); saveSettings(); };
+$("#themeBtn").onclick = () => {
+  const dark = settings.theme ? settings.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  settings.theme = dark ? "light" : "dark"; applySettings(); saveSettings();
+};
+$("#mode").onchange = e => { settings.mode = e.target.value; saveSettings(); };
+$("#rate").onchange = e => { settings.rate = e.target.value; saveSettings(); };
+$("#resumeBtn").onclick = () => {
+  const el = document.getElementById("v" + store.get("rcm-last", 0));
+  if (el) el.scrollIntoView({block: "center"});
+  $("#resume").hidden = true;
+};
+
+/* ===== START ===== */
+applySettings();
+render("");
+if (store.get("rcm-last", 0) > 0) $("#resume").hidden = false;
+if (hasSpeech){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+</script>
+</body>
+</html>
